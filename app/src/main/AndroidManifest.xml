@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.nazanin.notepad">
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:name=".controller.FontManager"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        >
+        <meta-data
+            android:name="AdadToken"
+            android:value="020d717d159f4987a8a0401edf7897c0" />
+        <meta-data
+            android:name="AdadTestMode"
+            android:value="false" />
+        <activity android:name=".controller.activities.MenuActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+
+        </activity>
+        <activity android:name=".controller.activities.NotepadActivity" />
+        <activity android:name=".controller.activities.NoteManagerActivity"/>
+        <activity android:name=".controller.activities.ViewNoteActivity" />
+        <activity android:name=".controller.activities.CheckListActivity" />
+        <activity android:name=".controller.activities.CheckListReminderActivity"/>
+        <activity
+            android:name="ir.adad.client.AdadActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
+            android:theme="@android:style/Theme.Translucent" />
+    </application>
+
+
+</manifest>
