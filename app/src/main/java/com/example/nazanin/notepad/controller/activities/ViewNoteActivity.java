@@ -81,10 +81,17 @@ public class ViewNoteActivity extends AppCompatActivity implements View.OnClickL
             case R.id.copy:
                 copy();
                 break;
+            case R.id.share:
+                share();
+                break;
 
         }
     }
 
+
+    public void share(){
+
+    }
 
     public void edit(View view) {
         FileManager fileManager=new FileManager();

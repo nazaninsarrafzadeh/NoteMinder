@@ -93,8 +93,6 @@ public class FileManager {
             note.setText(openFile(filename,context));
             notesList.add(note);
         }
-     //
-        //Toast.makeText(context,String.valueOf(notesList.size()),Toast.LENGTH_SHORT).show();
         return notesList;
     }
 

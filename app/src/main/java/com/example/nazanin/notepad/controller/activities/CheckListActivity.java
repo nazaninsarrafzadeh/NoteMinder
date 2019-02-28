@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.example.nazanin.notepad.R;
 import com.example.nazanin.notepad.controller.adapters.CheckListAdapter;
 import com.example.nazanin.notepad.model.dao.CategoryDbHelper;
+import com.example.nazanin.notepad.model.dto.Category;
 import com.example.nazanin.notepad.model.dto.CheckList;
 import com.example.nazanin.notepad.model.dao.CheckListDbHelper;
 
@@ -30,20 +31,24 @@ public class CheckListActivity extends AppCompatActivity implements AdapterView.
     private ArrayList<CheckList> checkLists=new ArrayList<>();
     private CheckListDbHelper checkListDbHelper;
     private CheckListAdapter checkListAdapter;
+    private CategoryDbHelper categoryDbHelper;
     private Spinner spinner;
-    private String[] categoryChoices={"همه","کار","خرید","درسی","شخصی"};
+    private CheckList checkList;
+    private ArrayList<String> categoryChoices;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_list);
-
+        categoryDbHelper = new CategoryDbHelper(this);
+        categoryChoices = categoryDbHelper.getcategories();
         recyclerView=findViewById(R.id.checkListsView);
         spinner = findViewById(R.id.categorySpinner);
         final ArrayAdapter<String> spinnerAdapter=new ArrayAdapter<>(this,R.layout.support_simple_spinner_dropdown_item,categoryChoices);
         spinner.setAdapter(spinnerAdapter);
         spinner.setOnItemSelectedListener(this);
+        checkList = new CheckList();
         checkListDbHelper=new CheckListDbHelper(this);
         checkLists=checkListDbHelper.getCheckLists();
 
@@ -60,7 +65,8 @@ public class CheckListActivity extends AppCompatActivity implements AdapterView.
         super.onRestart();
         checkLists.clear();
         checkLists=checkListDbHelper.getCheckLists();
-        Toast.makeText(this,String.valueOf(checkLists.size()), Toast.LENGTH_SHORT).show();
+        checkListAdapter=new CheckListAdapter(checkLists,this);
+        recyclerView.setAdapter(checkListAdapter);
         checkListAdapter.notifyDataSetChanged();
     }
 
@@ -68,7 +74,7 @@ public class CheckListActivity extends AppCompatActivity implements AdapterView.
     public void makeNewCheklist(View view) {
        Intent intent=new Intent(this,CheckListReminderActivity.class);
        startActivity(intent);
-    }
+}
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -77,9 +83,10 @@ public class CheckListActivity extends AppCompatActivity implements AdapterView.
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        CategoryDbHelper categoryDbHelper = new CategoryDbHelper(getApplicationContext());
-        String categoryName=parent.getItemAtPosition(position).toString();
-     //   checkList.setCategory(categoryDbHelper.getCategoryByName(categoryName));
+        checkLists = checkListDbHelper.getCheckListsByCategory(position+1);
+        checkListAdapter=new CheckListAdapter(checkLists,this);
+        recyclerView.setAdapter(checkListAdapter);
+        checkListAdapter.notifyDataSetChanged();
     }
 
     @Override

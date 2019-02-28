@@ -28,7 +28,6 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.MyVi
 
     private ArrayList<CheckList> checkLists;
     private Context context;
-    private CardView cardView;
 
     public CheckListAdapter(ArrayList<CheckList> checkLists,Context context){
         this.checkLists=checkLists;
@@ -49,24 +48,19 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.MyVi
 
         CheckList checkList=checkLists.get(position);
         holder.checkBox.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-        Typeface font = Typeface.createFromAsset(context.getAssets(), "font/byekan.ttf");
-        holder.checkBox.setTypeface(font);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             holder.checkBox.setButtonTintList(ColorStateList.valueOf(Color.DKGRAY));
         }
-        else {
-            cardView.setBackgroundColor(Color.argb(100,132,54,26));
-        }
+        Typeface font = Typeface.createFromAsset(context.getAssets(), "font/byekan.ttf");
+        holder.checkBox.setTypeface(font);
         holder.checkBox.setTextSize(TypedValue.COMPLEX_UNIT_SP,18);
         holder.checkBox.setText(checkList.getWhatToDo());
         holder.checkBox.setChecked(checkList.isDone());
-
-
     }
 
     @Override
     public int getItemCount() {
-        Log.d("ff", "getItemCount: "+checkLists.size());
+    //    Log.d("ff", "getItemCount: "+checkLists.size());
         return checkLists.size();
     }
 
@@ -76,10 +70,8 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.MyVi
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            cardView=itemView.findViewById(R.id.card);
-            checkBox=new CheckBox(context);
+            checkBox = itemView.findViewById(R.id.task);
             checkBox.setOnCheckedChangeListener(this);
-            cardView.addView(checkBox);
 
         }
 
@@ -87,7 +79,7 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.MyVi
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             int position=getAdapterPosition();
             CheckList checkList=checkLists.get(position);
-            Toast.makeText(context,String.valueOf(position+1),Toast.LENGTH_SHORT).show();
+         //   Toast.makeText(context,String.valueOf(position+1),Toast.LENGTH_SHORT).show();
             checkLists.remove(position);
             notifyItemRemoved(position);
             CheckListDbHelper checkListDbHelper=new CheckListDbHelper(context);

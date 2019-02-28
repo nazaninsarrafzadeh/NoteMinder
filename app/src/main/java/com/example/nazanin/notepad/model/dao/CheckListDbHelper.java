@@ -40,7 +40,7 @@ public class CheckListDbHelper {
             while (!cursor.isAfterLast()){
                 CheckList checkList=new CheckList();
                 checkList.setId(cursor.getInt(cursor.getColumnIndex("ID")));
-                checkList.setDone(cursor.getInt(cursor.getColumnIndex("DONE"))==1 ? true:false);
+                checkList.setDone(cursor.getInt(cursor.getColumnIndex("DONE")) == 1);
                 checkList.setWhatToDo(cursor.getString(cursor.getColumnIndex("WHATTODO")));
                 checkLists.add(checkList);
                 cursor.moveToNext();
@@ -52,6 +52,23 @@ public class CheckListDbHelper {
     public void delete(int position){
         db=dbHelper.getWritableDatabase();
         db.delete("CHECKLISTS","ID="+position,null);
+    }
+
+    public ArrayList<CheckList> getCheckListsByCategory(int id){
+        db=dbHelper.getReadableDatabase();
+        checkLists=new ArrayList<>();
+        Cursor cursor=db.rawQuery("SELECT * FROM CHECKLISTS WHERE CATEGORY="+id,null);
+        if (cursor.moveToFirst()){
+            while (!cursor.isAfterLast()){
+                CheckList checkList=new CheckList();
+                checkList.setId(cursor.getInt(cursor.getColumnIndex("ID")));
+                checkList.setDone(cursor.getInt(cursor.getColumnIndex("DONE"))==1 ? true:false);
+                checkList.setWhatToDo(cursor.getString(cursor.getColumnIndex("WHATTODO")));
+                checkLists.add(checkList);
+                cursor.moveToNext();
+            }
+        }
+        return checkLists;
     }
 
 }
