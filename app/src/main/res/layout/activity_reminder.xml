@@ -79,6 +79,7 @@
                     android:layout_below="@+id/task"
                     android:background="@drawable/dialog"
                     android:layout_margin="10dp"
+                    android:onClick="pickDate"
                     android:textSize="16sp"/>
 
                 <Button
@@ -91,6 +92,7 @@
                     android:drawableTint="@color/toolbar"
                     android:background="@drawable/dialog"
                     android:layout_margin="10dp"
+                    android:onClick="pickTime"
                     android:textSize="16sp"/>
             </LinearLayout>
         </RelativeLayout>

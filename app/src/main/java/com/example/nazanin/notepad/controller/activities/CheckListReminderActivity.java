@@ -1,30 +1,37 @@
 package com.example.nazanin.notepad.controller.activities;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.nazanin.notepad.R;
+import com.example.nazanin.notepad.controller.Fragments.TimePickerFragment;
+import com.example.nazanin.notepad.controller.notification.AlertReceiver;
 import com.example.nazanin.notepad.model.dao.CategoryDbHelper;
 import com.example.nazanin.notepad.model.dao.CheckListDbHelper;
 import com.example.nazanin.notepad.model.dto.Category;
 import com.example.nazanin.notepad.model.dto.CheckList;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class CheckListReminderActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class CheckListReminderActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener,TimePickerDialog.OnTimeSetListener {
 
     private EditText whatToDoEditText;
     private Button dateBtn,timeBtn;
@@ -54,6 +61,13 @@ public class CheckListReminderActivity extends AppCompatActivity implements Adap
 
 
     }
+
+    public void pickTime(View view) {
+        DialogFragment timePicker = new TimePickerFragment();
+        timePicker.show(getSupportFragmentManager(),"timePicker");
+
+    }
+
     private boolean isEmpty(String whatToDo){
         if (TextUtils.isEmpty(whatToDo)){
             Toast.makeText(this,"فیلد مورد نظر خالی است",Toast.LENGTH_SHORT).show();
@@ -97,5 +111,25 @@ public class CheckListReminderActivity extends AppCompatActivity implements Adap
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+
+    @Override
+    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY,hourOfDay);
+        calendar.set(Calendar.MINUTE,minute);
+        calendar.set(Calendar.SECOND,0);
+        startAlarm(calendar);
+    }
+
+    private void startAlarm(Calendar calendar){
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this,AlertReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this,1,intent,0);
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
+    }
+
+    public void pickDate(View view) {
     }
 }

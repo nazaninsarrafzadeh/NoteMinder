@@ -2,6 +2,7 @@ package com.example.nazanin.notepad.controller.activities;
 
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -36,13 +37,13 @@ public class ViewNoteActivity extends AppCompatActivity implements View.OnClickL
         editImageButton=findViewById(R.id.edit);
         copyImageButton=findViewById(R.id.copy);
         deleteImageButton=findViewById(R.id.delete);
-      //  shareImageButton=findViewById(R.id.share);
+        shareImageButton=findViewById(R.id.share);
         confirmChangesButton=findViewById(R.id.confirmChangesButton);
         confirmChangesButton.setVisibility(View.INVISIBLE);
         editImageButton.setOnClickListener(this);
         copyImageButton.setOnClickListener(this);
         deleteImageButton.setOnClickListener(this);
-      //  shareImageButton.setOnClickListener(this);
+        shareImageButton.setOnClickListener(this);
         titletxt=findViewById(R.id.title);
         bodytxt=findViewById(R.id.note);
         bodytxt.setEnabled(false);
@@ -81,6 +82,7 @@ public class ViewNoteActivity extends AppCompatActivity implements View.OnClickL
             case R.id.copy:
                 copy();
                 break;
+
             case R.id.share:
                 share();
                 break;
@@ -90,7 +92,11 @@ public class ViewNoteActivity extends AppCompatActivity implements View.OnClickL
 
 
     public void share(){
-
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT,fileName);
+        shareIntent.putExtra(Intent.EXTRA_TEXT,fileText);
+        startActivity(Intent.createChooser(shareIntent,"share"));
     }
 
     public void edit(View view) {

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -25,7 +26,7 @@ import java.util.ArrayList;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
-public class CheckListActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class CheckListActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnTouchListener {
 
     private RecyclerView recyclerView;
     private ArrayList<CheckList> checkLists=new ArrayList<>();
@@ -33,6 +34,7 @@ public class CheckListActivity extends AppCompatActivity implements AdapterView.
     private CheckListAdapter checkListAdapter;
     private CategoryDbHelper categoryDbHelper;
     private Spinner spinner;
+    private boolean spinnerTouched;
     private CheckList checkList;
     private ArrayList<String> categoryChoices;
 
@@ -47,6 +49,7 @@ public class CheckListActivity extends AppCompatActivity implements AdapterView.
         spinner = findViewById(R.id.categorySpinner);
         final ArrayAdapter<String> spinnerAdapter=new ArrayAdapter<>(this,R.layout.support_simple_spinner_dropdown_item,categoryChoices);
         spinner.setAdapter(spinnerAdapter);
+        spinner.setOnTouchListener(this);
         spinner.setOnItemSelectedListener(this);
         checkList = new CheckList();
         checkListDbHelper=new CheckListDbHelper(this);
@@ -83,14 +86,29 @@ public class CheckListActivity extends AppCompatActivity implements AdapterView.
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        checkLists = checkListDbHelper.getCheckListsByCategory(position+1);
-        checkListAdapter=new CheckListAdapter(checkLists,this);
-        recyclerView.setAdapter(checkListAdapter);
-        checkListAdapter.notifyDataSetChanged();
+        if (spinnerTouched){
+
+            if (position == 0){
+                checkLists = checkListDbHelper.getCheckLists();
+            }
+            else {
+                checkLists = checkListDbHelper.getCheckListsByCategory(position + 1);
+            }
+
+            checkListAdapter = new CheckListAdapter(checkLists, this);
+            recyclerView.setAdapter(checkListAdapter);
+            checkListAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        spinnerTouched = true;
+        return false;
     }
 }

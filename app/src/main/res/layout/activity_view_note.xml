@@ -43,6 +43,7 @@
             android:layout_margin="10dp"
             android:textDirection="rtl"
             android:gravity="right"
+            android:lineSpacingExtra="7dp"
             android:textColor="#000"
             android:layout_below="@+id/home_toolbar"
             android:background="@null"

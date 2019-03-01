@@ -53,17 +53,9 @@
         android:textDirection="rtl"
         android:gravity="right"
         android:layout_below="@+id/titleTextView"
-
+        android:lineSpacingExtra="7dp"
         android:textSize="18sp"
         android:background="@drawable/round_button"/>
-    <!--<TextView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:id="@+id/quote"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--android:padding="5dp"/>-->
-
-
 
 
 </RelativeLayout>
